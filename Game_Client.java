@@ -3,12 +3,15 @@ import java.io.*;
 import java.net.*;
 import java.util.*;
 
+import com.sun.xml.internal.ws.wsdl.writer.document.Port;
+
 public class Game_Client{
     private static InetAddress host;
-    private static final int PORT = 1236;
+//    private static final int PORT = 1236;
 
     public static void main(String[] args)
     {
+        int PORT = 1238;
         Socket server = null;
         String message, command, response, serverName = "";
         int serverPort;
@@ -31,6 +34,7 @@ public class Game_Client{
                 command = tokens.nextToken();
 
                 // user will send "JOIN" with the IP and port info
+                // standard test "JOIN localhost 1234"
                 if(command.equals("JOIN"))
                 {
                     if (server != null)
@@ -40,7 +44,7 @@ public class Game_Client{
                     }
                     serverName = tokens.nextToken();
                     serverPort = Integer.parseInt(tokens.nextToken());
-                    server = new Socket("localhost", 1236);
+                    server = new Socket("localhost", serverPort);
 
                     serverInput = new Scanner(server.getInputStream());
                     serverOutput = new PrintWriter(server.getOutputStream(), true);
@@ -58,12 +62,13 @@ public class Game_Client{
                         serverOutput.println(username);
 
                         // check available
-                        if(serverInput.next().equals("ACCEPTED")){
+                        String serverResponse = serverInput.next();
+                        if(serverResponse.equals("ACCEPTED")){
                             System.out.println("Your username has been accepted. You are: " + username);
                             nameAccepted = true;
                         }
 
-                        else if (serverInput.next().equals("TAKEN")) {
+                        else if (serverResponse.equals("TAKEN")) {
                             System.out.println("This username has already been taken. Please enter another username");
                             continue;
                         }

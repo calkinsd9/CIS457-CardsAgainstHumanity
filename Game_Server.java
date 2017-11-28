@@ -23,6 +23,7 @@ public class Game_Server {
     private Boolean gameOver;
     private String currentBlackCard;
     private Random r;
+    private int[] playerScores;
 
     //shared objects
     private String[] playerNames;
@@ -31,8 +32,17 @@ public class Game_Server {
     private int threadCount = -1;
 
 
+    public static void main(String[] args)
+    {
+        try {
+            Game_Server game_Server = new Game_Server();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+    }
 
-    public void main(String[] args) throws IOException
+    public Game_Server() throws IOException
     {
         //initialize shared objects
         playerNames = new String[MAX_NUMBER_OF_PLAYERS];
@@ -43,6 +53,7 @@ public class Game_Server {
         waiting = new Boolean[MAX_NUMBER_OF_PLAYERS];
         done = new Boolean[MAX_NUMBER_OF_PLAYERS];
         gameOver = false;
+        playerScores = new int[MAX_NUMBER_OF_PLAYERS];
 
         
         currentBlackCard = "";
@@ -89,7 +100,7 @@ public class Game_Server {
                             break;
                         }
                     }
-                } while (finished);
+                } while (!finished);
 
                 //initialize the first round
                 //TODO: set pointsAndStats object
